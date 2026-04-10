@@ -1,0 +1,34 @@
+
+#config.grammer.console.log = 'print'
+
+print("hello print!")
+
+#config.grammer.console.log = 'console.log'
+
+console.log("hello console!")
+
+#config.oop.using = true
+
+
+class person(){
+    init(){
+        pass
+    }
+}
+
+#config.oop.using = false
+#config.grammer.endstring = ';'
+#condif.grammer.essential.endstring = false
+
+
+console.log("hello world");
+
+
+
+
+
+free grammer language
+
+
+
+언어이름 : GOAT

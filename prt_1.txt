@@ -1,0 +1,24 @@
+set a 10
+set b 10
+
+add a 10
+
+fuc change a b{
+    set temp b
+    set b a
+    set a b
+    return 0
+}
+
+
+
+while a {
+    add a 1
+    print a
+}
+
+for range 1 10 1{
+
+}
+
+class
