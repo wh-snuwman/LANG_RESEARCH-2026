@@ -97,8 +97,8 @@ def SPACE_REMOVE(str_ = str) -> str: # 문자열내의 모든 공백제거
             lineNospace += i
     return lineNospace
 
-
-def TOKENIZATION(LINE_ = str) -> list: # 라인하나를 토큰화 시켜쥼(토큰은 예약어,변수명,괄호등으로 나누어진 코드의 기본단위)
+# 문자열을 토큰화 시켜쥼(토큰은 예약어,변수명,괄호등으로 나누어진 코드의 기본단위)
+def TOKENIZATION(LINE_ = str) -> list:
     command_type = 'none'
     if isIn(REVERSED_WORD['equal'],'='): # 등호가 포함되어 있는지 확인(커맨드 타입 구별)
         command_type = 'allocation'
@@ -134,12 +134,15 @@ def TOKENIZATION(LINE_ = str) -> list: # 라인하나를 토큰화 시켜쥼(토
                     if len(REVERSED_WORD_SPLIT[wordType]) == wordSense_count[wordType]+1: # 감지했던 모든 문자가 예약어의 글자와 동일함 -> 토큰화
                         token.append(LINE[0:count+1])
                         other = LINE[count+1:]
-                        # print(colorString(other,(255,255,0)))
+                        print(colorString(other,(255,255,0)))
                         
                         if not len(other) <= 1:
-                            token.append(TOKENIZATION(other))
-                        
+                            result = TOKENIZATION(other) # 재귀함수를 사용하여 결과 도출.(타입은 리스트)
+                            for i in result: # 그냥 바로 append하면 리스트 중첩상태로 저장됨. 따라서 풀어서 저장해줘야함
+                                token.append(i)
                         return token
+                    
+
                     wordSense_count[wordType] += 1
                 else:
                     # print(colorString(wordType,(0,0,255)))
