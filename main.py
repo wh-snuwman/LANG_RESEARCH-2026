@@ -56,14 +56,16 @@ REVERSED_WORD = {
     "bracket_s" : "(",
     "bracket_e" : ")",
     "equal" : "=",
-    "loop" : "for",
-    "null" : "null"
+    "for" : "for",
+    "null" : "null",
+    "true" : "true",
+    "false" : "false",
 }
 
-
+# age = (30+20)
 CODE = """
-age = (30+20)
-null null null null
+
+true null false null
 """
 
 
@@ -97,30 +99,20 @@ def SPACE_REMOVE(str_ = str) -> str: # 문자열내의 모든 공백제거
 
 
 def TOKENIZATION(LINE_ = str) -> list: # 라인하나를 토큰화 시켜쥼(토큰은 예약어,변수명,괄호등으로 나누어진 코드의 기본단위)
-    
-    
     command_type = 'none'
     if isIn(REVERSED_WORD['equal'],'='): # 등호가 포함되어 있는지 확인(커맨드 타입 구별)
         command_type = 'allocation'
     else:
         command_type = 'function'
-    
-        
     LINE = SPACE_REMOVE(LINE_) # 모든공백제거
-    
     is_wordSense = False # 현재 예약어를 감지중인지
     words_sense = [] # 예약어의 n번째 글자가 같을수 있으니 여러개의 예약어를 동시에 감지
-    wordSense_count = 0 # 감지중일때 반복문을 실행하며 n번째글자가 예약어의 n번째 자리와 동일한지 확인할떄 쓰는 카운터
-
+    wordSense_count = {} # 감지중일때 반복문을 실행하며 n번째글자가 예약어의 n번째 자리와 동일한지 확인할떄 쓰는 카운터
     count = 0
     token = []
-
-    if len(LINE) <= 1:
-        return LINE 
-
     for char in LINE:
         if char in list(REVERSED_WORD.values()): # 한글자 예약어는 바로 감지 가능!
-            print(f'한글자 예약어 감지됨:{char}') 
+            # print(f'한글자 예약어 감지됨:{char}') 
             continue
             # 바로 토큰화 시키고 다음으로
 
@@ -129,31 +121,33 @@ def TOKENIZATION(LINE_ = str) -> list: # 라인하나를 토큰화 시켜쥼(토
                 is_wordSense  = True # 예약어 감지를 시작함
                 if v[0] == char:
                     words_sense.append(k) # 현재 감지중인 예약어의 타입형 이름( = (x) equal (o))
-                    # print(k)
+                    wordSense_count[k] = 0
 
         if is_wordSense:
+            delType_ = []
             for wordType in words_sense:
-                if REVERSED_WORD_SPLIT[wordType][wordSense_count] == char:
-                    # print(colorString(char,(0,255,0)))
+                # 조건1 : 감지하고 있는 단어의 길이가 감지 범위보다 작으면 안됨.
+                # 조건2 : 현재 감지중인 n번째 글자가 예약어의 n번째 글자와 같아야함.
+                if (len(REVERSED_WORD_SPLIT[wordType]) > wordSense_count[wordType]) and (REVERSED_WORD_SPLIT[wordType][wordSense_count[wordType]] == char):
                     # 예약어가 최종적으로 맞는지 감지
                     # 아직 감지가 최종적으로 끝나지 않았으면 계속해서 진행
-                    if len(REVERSED_WORD_SPLIT[wordType]) == wordSense_count+1: # 감지했던 모든 문자가 예약어의 글자와 동일함 -> 토큰화
+                    if len(REVERSED_WORD_SPLIT[wordType]) == wordSense_count[wordType]+1: # 감지했던 모든 문자가 예약어의 글자와 동일함 -> 토큰화
                         token.append(LINE[0:count+1])
-                        
-                        print(LINE[count+1:])
                         other = LINE[count+1:]
-                        token.append(TOKENIZATION(other))
-                        return token
+                        # print(colorString(other,(255,255,0)))
                         
-
+                        if not len(other) <= 1:
+                            token.append(TOKENIZATION(other))
+                        
+                        return token
+                    wordSense_count[wordType] += 1
                 else:
-                    print(colorString(char,(255,0,0)))
-                    words_sense.remove(wordType)
-                wordSense_count += 1
+                    # print(colorString(wordType,(0,0,255)))
+                    delType_.append(wordType) # 반복문 실행중에 항목제거 시, 순서제어에 오류발생(심지어 에러도 안뜸..!) -> 반복문 분리해서 지우기 
+            for i in delType_: 
+                words_sense.remove(i)
 
-        # print(words_sense)
-
-        count += 1 # 감지하는 자리수 하나씩 올리기
+        count += 1 # 감지하는 자리수(공통) 하나씩 올리기
 
 
 

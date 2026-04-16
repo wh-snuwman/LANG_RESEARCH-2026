@@ -1,0 +1,16 @@
+우선순위,연산자,영어 명칭 (Description),결합 방향 (Associativity)
+1,()[]->.,Parentheses (Grouping)Array subscriptMember access via pointerMember access via object,Left-to-Right
+2,++ --+ -! ~(type)*&sizeof,Postfix Increment/DecrementUnary plus/minusLogical NOT / Bitwise NOTType castingIndirection (Dereference)Address-ofSize-of operator,Right-to-Left
+3,* / %,"Multiplicative (Multiplication, Division, Remainder)",Left-to-Right
+4,+ -,"Additive (Addition, Subtraction)",Left-to-Right
+5,<< >>,"Bitwise shift (Left shift, Right shift)",Left-to-Right
+6,< <=> >=,"Relational (Less than, Less than or equal, etc.)",Left-to-Right
+7,== !=,"Equality (Equal to, Not equal to)",Left-to-Right
+8,&,Bitwise AND,Left-to-Right
+9,^,Bitwise XOR (Exclusive OR),Left-to-Right
+10,|,Bitwise OR (Inclusive OR),Left-to-Right
+11,&&,Logical AND,Left-to-Right
+12,||,Logical OR,Left-to-Right
+13,?:,Ternary conditional,Right-to-Left
+14,=+= -=*= /= 등,"Simple assignmentCompound assignment (Add and assign, etc.)",Right-to-Left
+15,",",Comma operator,Left-to-Right
